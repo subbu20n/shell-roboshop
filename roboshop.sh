@@ -1,6 +1,6 @@
 #!/bin/bash
 
-AMI_ID="ami_09c813fb71547fcc4f"
+AMI_ID="ami-09c813fb71547fc4f"
 SG_ID="sg-04f5b8fdb267df1bd" # Replace with your SG ID
 INSTANCES=("mongodb" "mysql" "redis" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
 ZONE_ID="Z06528725AJCPEPL0K7K"
