@@ -39,7 +39,7 @@ dnf module enable nginx:1.24 -y &>>$LOG_FILE
 VALIDATE $? "Enabling nginx:1.24 -y"
 
 dnf install nginx -y &>>$LOG_FILE
-VLIDATE $? "Installing nginx -y"
+VALIDATE $? "INSTALLING nginx -y"
 
 systemctl enable nginx &>>$LOG_FILE
 systemctl start nginx
