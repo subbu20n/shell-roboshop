@@ -10,10 +10,10 @@ for instace in ${INSTANCES[@]}
 do
 
   INSTANCE_ID=$(aws ec2 run-instances \ --image-id ami-09c813fb71547fc4f \ --instance-type t2.micro \
-
-   --security-group-ids sg-04f5b8fdb267df1bd \ --tag-specifications 'ResourceType=instance,
-   Tags=[{Key=Name,Value=test}]' --query "Instances[0].PrivateIpAddress" --output text
+  --security-group-ids sg-04f5b8fdb267df1bd \ --tag-specifications 'ResourceType=instance,
+   Tags=[{Key=Name,Value=test}]' --query "Instances[0].PrivateIpAddress" --output text)
     
+               
     if [ $instance != "frontend" ]
     then 
        IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query
