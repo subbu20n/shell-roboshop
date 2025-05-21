@@ -1,4 +1,5 @@
 #!/bin/bash
+USERID=$(id -u)
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
@@ -44,7 +45,7 @@ systemctl start mongod &>>$LOG_FILE
 VALIDATE $? "Starting mongodb"
 
 sed -i 's/127.0.0.0/0.0.0.0/g' /etc/mongod.conf
-VALIDATE $? "Edithing mongodb conf file for remote connections"
+VALIDATE $? "Editing mongodb conf file for remote connections"
 
 systemctl restart mongod &>>$LOG_FILE
 VALIDATE $? "Restarting mongodb"
