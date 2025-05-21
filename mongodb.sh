@@ -11,7 +11,7 @@ LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 mkdir -p $LOGS_FOLDER
 echo "Script started execution at: $(date)" | tee -a $LOG_FILE
 
-#check the user has root priveliges or not
+# check the user has root priveliges or not
 if [ $USERID -ne 0 ]
 then  
    echo -e "$R ERROR:: please run this script with root access $N" | tee -a $LOG_FILE
