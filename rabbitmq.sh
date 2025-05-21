@@ -36,15 +36,15 @@ fi
 }
 
 cp $SCRIPT_DIR/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
-VALIDATE $? "Adding raabitm repo"
+VALIDATE $? "Adding rabbitm repo"
 
 dnf install rabbitmq-server -y &>>$LOG_FILE
 VALIDATE $? "Installing rabbitmq server"
 
-systemctl enable rabbitmq &>>$LOG_FILE
+systemctl enable rabbitmq-server &>>$LOG_FILE
 VALIDATE $? "Enabling rabbitq server"
 
-systemctl start rabbitmq &>>$LOG_FILE
+systemctl start rabbitmq-server &>>$LOG_FILE
 VALIDATE $? "Starting rabbitmq server"
 
 rabbitmqctl add_user roboshop $RABBIT_PASSWORD &>>$LOG_FILE
