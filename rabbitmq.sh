@@ -42,12 +42,12 @@ dnf install rabbitmq-server -y &>>$LOG_FILE
 VALIDATE $? "Installing rabbitmq server"
 
 systemctl enable rabbitmq-server &>>$LOG_FILE
-VALIDATE $? "Enabling rabbitq server"
+VALIDATE $? "Enabling rabbitmq server"
 
 systemctl start rabbitmq-server &>>$LOG_FILE
 VALIDATE $? "Starting rabbitmq server"
 
-rabbitmqctl add_user roboshop $RABBIT_PASSWORD &>>$LOG_FILE
+rabbitmqctl add_user roboshop $RABBITMQ_PASSWORD &>>$LOG_FILE
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOG_FILE
 
 END_TIME=$(date +%s)
