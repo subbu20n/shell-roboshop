@@ -52,7 +52,7 @@ VALIDATE $? "creating app directory"
 
 curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip  &>>$LOG_FILE
 VALIDATE $? "Downloading shipping"
-
+rm -rf /app/*
 cd /app
 unzip /tmp/shipping.zip &>>$LOG_FILE
 VALIDATE $? "Unzipping shipping"
