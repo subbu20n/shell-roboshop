@@ -77,14 +77,19 @@ VALIDATE $? "start shipping"
 
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing mysql"
-
+mysql -h mysql.subbuaws.site -u root -pRoboShop@1 -e 'use cities'
+if [ $? - ne 0 ]
+then 
 mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
 
 mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE
 
 mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
 VALIDATE $? "Loading data into mysql"
-
+else 
+    echo -e "data is already loaded in mysql... $Y SKIPPING $N" | &>>$LOG_FILE
+fi 
+   
 systemctl restart shipping &>>$LOG_FILE
 VALIDATE $? "Restarting shipping"
 
