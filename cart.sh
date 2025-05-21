@@ -33,34 +33,34 @@ else
 fi
 }
 
-dnf module  disable nodejs -y &>>$LOG_FILE
-VALIDATE $? "Disabling nodejs -y"
+dnf module disable nodejs -y &>>$LOG_FILE
+VALIDATE $? "Disabling nodejs -Y"
 
 dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "Enabling nodejs:20 -y"
 
 dnf install nodejs -y &>>$LOG_FILE
-VALIDATE $? "Installing nodejs -y"
+VALIDATE $? "Installing nodejs:20"
 
-id roboshop
+id roboshop 
 if [ $? -ne 0 ]
-then 
+then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
     VALIDATE $? "Creating system user roboshop"
-else
-    echo -e "system user roboshop already created ...$Y SKIPPING $N"
+else 
+    echo -e "system user roboshop already created ... $Y SKIPPING $N"
 fi
 
-mkdir -p /app
-VALIDATE $? "Creating app directory"
+mkdir -p /app &>>$LOG_FILE
+VALIDATE $? "creating app directory"
 
-curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zi &>>$LOG_FILE
+curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip  &>>$LOG_FILE
 VALIDATE $? "Downloading cart"
 
 rm -rf /app/*
 cd /app
 unzip /tmp/cart.zip &>>$LOG_FILE
-VALIDATE $? "Unzipping cart"
+VALIDATE $? "unzipping cart"
 
 cd /app
 npm install &>>$LOG_FILE
@@ -77,7 +77,4 @@ VALIDATE $? "Starting cart"
 END_TIME=$(date +%s)
 TOTAL_TIME=$(($END_TIME - $START_TIME))
 
-echo -e "Script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
-
-
-
+echo -e "Script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N"  | tee -a $LOG_FILE
