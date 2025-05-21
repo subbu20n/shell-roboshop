@@ -72,7 +72,7 @@ VALIDATE $? "Copying catalogue service"
 systemctl daemon-reload &>>$LOG_FILE
 systemctl enable catalogue &>>$LOG_FILE
 systemctl start catalogue
-VALIDATE $? "Starting catalogue"
+VALIDATE $? "Starting Catalogue"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongod.repo
 dnf install mongodb-mongosh -y &>>$LOG_FILE
