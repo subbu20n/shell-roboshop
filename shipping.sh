@@ -72,8 +72,8 @@ VALIDATE $? "Enabling Shipping"
 systemctl start shipping
 VALIDATE $? "Starting shipping"
 
-dnf install mysql -y  &>>$LOG_FILE
-VALIDATE $? "Installing mysql"
+dnf install mysql -y &>>$LOG_FILE
+VALIDATE $? "Install mysql"
 
 mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD -e 'use cities'
 if [ $? -ne 0 ]
