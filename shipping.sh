@@ -75,12 +75,12 @@ VALIDATE $? "Starting shipping"
 dnf instll mysql -y &>>$LOG_FILE
 VAlIDATE $? "Installing mysql"
 
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -p$MYSQL_ROOT_PASSWORD -e 'use cities'
+mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD -e 'use cities'
 if [ $? -ne 0 ]
 then 
-   mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -p$MYSQL_ROOT_PASSWOED < /app/db/schema.sql &>>$LOG_FILE
-   mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -p$MYSQL_ROOT_PASSWOED < /app/db/app-user.sql &>>$LOG_FILE
-   mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -p$MYSQL_ROOT_PASSWOED < /app/db/master-data.sql &>>$LOG_FILE
+   mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWOED < /app/db/schema.sql &>>$LOG_FILE
+   mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWOED < /app/db/app-user.sql &>>$LOG_FILE
+   mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWOED < /app/db/master-data.sql &>>$LOG_FILE
    VALIDATE $? "Load data into mysql"
 else
    echo -e "data is already loaded in mysql ... $Y SKIPPING $N"
