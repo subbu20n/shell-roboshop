@@ -3,7 +3,7 @@
 AMI_ID="ami-09c813fb71547fc4f"
 SG_ID="sg-04f5b8fdb267df1bd" # replace with your SG ID
 INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
-ZONE_ID="Z06528725AJCPEPLOK7K" # replace with your ZONE ID
+ZONE_ID="Z06528725AJCPEPL0K7K" # replace with your ZONE ID
 DOMAIN_NAME="subbuaws.site" # replace with your domain
 
 #for instance in ${INSTANCES[@]}
@@ -27,7 +27,7 @@ do
         "Comment": "Creating or Updating a record set for cognito endpoint"
         ,"Changes": [{
         "Action"              : "UPSERT"
-        ,"ResourceRecordSet"  : {
+        ,"ResourceRecordSet"  : 
             "Name"              : "'$RECORD_NAME'"
             ,"Type"             : "A"
             ,"TTL"              : 1
