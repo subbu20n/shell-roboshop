@@ -61,7 +61,7 @@ VALIDATE $? "Downloading cart"
 
 rm -rf /app/*
 cd /app
-unzip /tmp/cart..zip &>>$LOG_FILE
+unzip /tmp/cart.zip &>>$LOG_FILE
 VALIDATE $? "Unzipping cart"
 
 cd /app 
