@@ -45,13 +45,14 @@ VALIDATE $? "Enabling nginx"
 dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "Installing nginx"
 
-systemctl enable nginx &>>$LOG_FILE
+
+systemctl enable nginx
 VALIDATE $? "Enabling nginx"
 
 systemctl start nginx 
 VALIDATE $? "Starting nginx"
 
-rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
+rm -rf /usr/share/nginx/html/*  &>>$LOG_FILE
 VALIDATE $? "Removing default content"
 
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
