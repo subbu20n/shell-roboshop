@@ -73,7 +73,7 @@ VALIDATE $? "copying cart service"
 
 systemctl daemon-reload &>>$LOG_FILE
 systemctl eable cart &>>$LOG_FILE
-systectl start cart
+systemctl start cart
 VALIDATE $? "Starting cart"
 
 
