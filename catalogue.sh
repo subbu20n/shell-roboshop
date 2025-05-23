@@ -73,7 +73,7 @@ VALIDATE $? "copying catalogue service"
 
 systemctl daemon-reload &>>$LOG_FILE
 systemctl eable catalogue &>>$LOG_FILE
-systectl start catalogue
+systemctl start catalogue
 VALIDATE $? "Starting catalogue"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongod.repo
