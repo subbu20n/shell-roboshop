@@ -74,7 +74,7 @@ VALIDATE $? "copying user service"
 systemctl daemon-reload &>>$LOG_FILE
 systemctl eable user &>>$LOG_FILE
 systemctl start user
-VALIDATE $? "Starting user"
+VALIDATE $? "Starting user
 
 
 END_TIME=$(date +%s)
