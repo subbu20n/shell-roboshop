@@ -56,4 +56,4 @@ VALIDATE $? "Restarting mongodb"
 END_TIME=$(date +%S)
 TOTAL_TIME=$(($END_TIME - $START_TIME))
 
-echo _e "Script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
+echo -e "Script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
