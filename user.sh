@@ -61,7 +61,7 @@ VALIDATE $? "Downloading user"
 
 rm -rf /app/*
 cd /app
-unzip /tmp/user..zip &>>$LOG_FILE
+unzip /tmp/user.zip &>>$LOG_FILE
 VALIDATE $? "Unzipping user"
 
 cd /app 
