@@ -38,17 +38,22 @@ fi
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongod.repo
 VALIDATE $? "Copying mongodb repo"
 
-dnf install mpngodb-org -y
+dnf install mongodb-org -y &>>$LOG_FILE
 VALIDATE $? "Installing mongodb"
 
-systemctl enable mongod
+systemctl enable mongod &>>$LOG_FILE
 VALIDATE $? "Enabling mongodb"
 
-systemctl start mongod
+systemctl start mongod &>>$LOG_FILE
 VALIDATE $? "Starting mongodb"
 
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 VALIDATE $? "Editing mongod.conf for remote connections"
 
-systemctl restart mongod
+systemctl restart mongod &>>$LOG_FILE
 VALIDATE $? "Restarting mongodb"
+
+END_TIME=$(date +%S)
+TOTAL_TIME=$(($END_TIME - $START_TIME))
+
+echo _e "Script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
