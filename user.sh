@@ -73,7 +73,7 @@ VALIDATE $? "copying user service"
 
 systemctl daemon-reload &>>$LOG_FILE
 systemctl eable user &>>$LOG_FILE
-systectl start user
+systemctl start user
 VALIDATE $? "Starting user"
 
 
