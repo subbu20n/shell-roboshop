@@ -34,6 +34,9 @@ else
 fi 
 }
 
+echo "please enter root password to setup"
+read -s MYSQL_ROOT_PASSWORD
+
 dnf install mysql-server -y &>>$LOG_FILE
 VALIDATE $? "Installing mysql"
 
