@@ -5,7 +5,7 @@ failure(){
 
 }
 
-trap 'failure "${LINENO}" $"{BASH_COMMAND}" ERR'
+trap 'failure "${LINENO}" "${BASH_COMMAND}" ERR'
 
 START_TIME=$(date +%s)
 USERID=$(id -u)
