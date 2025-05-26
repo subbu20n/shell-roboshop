@@ -1,12 +1,11 @@
 #!/bin/bash
-set -e
+set -e 
 
 failure(){
-    echo "Failed at : $1 $2"
+    echo "failed at: $1 $2"
 }
 
 trap 'failure "${LINENO}" "${BASH_COMMAND}"' ERR
-
 
 START_TIME=$(date +%s)
 USERID=$(id -u)
