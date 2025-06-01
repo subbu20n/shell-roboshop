@@ -62,12 +62,11 @@ rm -rf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? "Removing default content"
 
 cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
-VALIDATE $? "Copyng  nginx conf"
+VALIDATE $? "Copying  nginx conf"
 
 systemctl restart nginx &>>$LOG_FILE
 VALIDATE $? "Restarting nginx"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $TOTAL_TIME ))
-
 echo -e "script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
