@@ -37,7 +37,7 @@ cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "copying mongodb repo"
 
 dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "Installing mongodb"
+VALIDATE $? "Installing mongodb server"
 
 systemctl enable mongod &>>$LOG_FILE
 VALIDATE $? "Enabling mongodb"
