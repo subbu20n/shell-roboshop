@@ -27,26 +27,31 @@ fi
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
-       echo -e "Installing $2 is ... $G SUCCESS $N"
+       echo -e "Installing $2 is ... $G SUCCESS $N" | tee -a $LOG_FILE
     else
-       echo -e "Installing $2 is ... $R FAILURE $N"
+       echo -e "Installing $2 is ... $R FAILURE $N" | tee -a $LOG_FILE
     fi      
 }
 
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongodb.repo
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "copying mongodb repo"
 
-dnf install mongodb-org -y 
+dnf install mongodb-org -y &>>$LOG_FILE
 VALIDATE $? "Installing mongodb"
 
-systemctl enable mongod
-VALIDATE $? "Enabling mongod"
+systemctl enable mongod &>>$LOG_FILE
+VALIDATE $? "Enabling mongodb"
 
-systemctl start mongod
-VALIDATE $? "Starting mongod"
+systemctl start mongod &>>$LOG_FILE
+VALIDATE $? "Starting mongodb"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
 VALIDATE $? "Editing mongod conf file for access remote connections"
 
-systemctl restart mongod
-VALIDATE $? "Restarting mongod"
+systemctl restart mongod &>>$LOG_FILE
+VALIDATE $? "Restarting mongodb"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME ))
+
+echo -e "script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
