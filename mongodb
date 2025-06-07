@@ -28,7 +28,8 @@ VALIDATE(){
    then 
       echo -e "Installing $2 is ... $G SUCCESS $N"
    else 
-      echo -e "Installing $2 is ... $R FAILURE $N"   
+      echo -e "Installing $2 is ... $R FAILURE $N"  
+   fi    
 }
 
 copy mongo.repo /etc/yum.repos.d/mongo.repo
