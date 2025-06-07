@@ -72,9 +72,9 @@ systemctl daemon-reload | tee -a $LOG_FILE
 VALIDATE $? "Daemon reload" 
 systemctl enable catalogue | tee -a $LOG_FILE 
 systemctl start catalogue | tee -a $LOG_FILE 
-validate $? "start catalogue" 
+validate $? "starting catalogue" 
 
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongodb.repo
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Copying mongodb repo"
 
 dnf install mongodb-mongosh -y &>> $LOG_FILE 
