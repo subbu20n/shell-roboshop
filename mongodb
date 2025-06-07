@@ -16,37 +16,37 @@ echo -e "script started execution at : $(date +%s)"
 
 if [ $USERID -ne 0 ]
 then 
-   echo -e "$R ERROR:: please run th script with root access $N"
+   echo -e "$R ERROR:: please run th script with root access $N" | tee -a $LOG_FILE
    exit 1
 else 
-   echo -e "you are running with root access"
+   echo -e "you are running with root access" | tee -a $LOG_FILE
 fi
 
 # validate function takes input as exit  status what command tried to install it
 VALIDATE(){
    if [ $1 -eq 0 ]
    then 
-      echo -e "Installing $2 is ... $G SUCCESS $N"
+      echo -e "Installing $2 is ... $G SUCCESS $N" | tee -a $LOG_FILE
    else 
-      echo -e "Installing $2 is ... $R FAILURE $N"  
+      echo -e "Installing $2 is ... $R FAILURE $N"  | tee -a $LOG_FILE
    fi    
 }
 
-copy mongo.repo /etc/yum.repos.d/mongo.repo
+copy mongo.repo /etc/yum.repos.d/mongo.repo 
 VALIDATE $? "copying mongodb repo"
 
-dnf install mongodb-org -y
-VALIDATE $? "installing mongodb"
+dnf install mongodb-org -y &>> $LOG_FILE
+VALIDATE $? "installing mongodb server"
 
 
-systemctl enable mongod
-VALIDATE $? "Enabling mongod" 
+systemctl enable mongod &>> $LOG_FILE
+VALIDATE $? "Enabling mongodb" 
 
-systemctl start mongod
-VALIDATE $? "Starting mongod" 
+systemctl start mongod &>> $LOG_FILE
+VALIDATE $? "Starting mongodb" 
 
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf 
 VALIDATE $? "Editing mongod conf file for allow remote connections" 
 
-systemctl restart mongod
-VALIDATE $? "Restarting mongod"
+systemctl restart mongod &>> $LOG_FILE
+VALIDATE $? "Restarting mongodb"
