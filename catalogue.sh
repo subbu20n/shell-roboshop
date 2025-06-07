@@ -66,15 +66,18 @@ npm install &>> $LOG_FILE
 VALIDATE $? "Installing dependencies"
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
-VALIDATE $? "Copying catalogue.service"
+VALIDATE $? "Copying catalogue service"
 
 systemctl daemon-reload | tee -a $LOG_FILE 
 VALIDATE $? "Daemon reload" 
+
 systemctl enable catalogue | tee -a $LOG_FILE 
+VALIDATE $? "Enabling catalogue"
+
 systemctl start catalogue | tee -a $LOG_FILE 
 validate $? "starting catalogue" 
 
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongodb.repo
 VALIDATE $? "Copying mongodb repo"
 
 dnf install mongodb-mongosh -y &>> $LOG_FILE 
