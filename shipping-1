@@ -34,71 +34,68 @@ else
 fi 
 }
 
-echo "please enter root password to setup"
-read -s MYAQL_ROOT_PASSWORD
+echo "please enter the root password"
+read -s MYSQL_ROOT_PASSWORD
 
-dnf install maven -y &>>$LOG_FILE
+dnf install maven -y
 VALIDATE $? "Installing maven or java"
 
 id roboshop
 if [ $? -ne 0 ]
 then 
-    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-    VALIDATE $? "Creating system user roboshop"
-else 
-    echo -e "system user roboshop already created ... $Y SKIPPING $N" 
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+    VALIDATE $? "Creating roboshop system user"
+else
+   echo -e " roboshop system user already created ... $Y SKIPPING $N"
 fi 
 
-mkdir -p /app &>>$LOG_FILE
-VALIDATE $? "creating app directory"
+mkdir -p /app 
+VALIDATE $? "Creating app directory"
 
-curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip  &>>$LOG_FILE
-VALIDATE $? "Downloading shipping"
+curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
+VALIDATE $? "Downloading shipping code"
 
 rm -rf /app/*
-cd /app
-unzip /tmp/shipping.zip &>>$LOG_FILE
-VALIDATE $? "Unzipping shipping"
+cd /app 
+unzip /tmp/shipping.zip
+VALIDATE $? "Unzipping shipping code"
 
-mvn clean package  &>>$LOG_FILE
-VALIDATE $? "Packaging the shipping application"
+cd /app 
+mvn clean package 
+VALIDATE $? "packaging the shipping application" 
 
-mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
+mv target/shipping-1.0.jar shipping.jar
 VALIDATE $? "moving and renaming jar file"
 
-cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
-VALIDATE $? "Copying shipping service"
+cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service 
+VALIDATE $? "Copying shipping service" 
 
-systemctl daemon-reload &>>$LOG_FILE
-VALIDATE $? "Daemon-reload"
+systemctl daemon-reload
+VALIDATE $? "Daemon reload"
 
-systemctl enable shipping &>>$LOG_FILE
-VALIDATE $? "Enabling shipping"
+systemctl enable shipping 
+systemctl start shipping
+VALIDATE $? "Starting shipping" 
 
-systemctl start shipping &>>$LOG_FILE
-VALIDATE $? "Starting shipping"
-
-dnf install mysql -y  &>>$LOG_FILE
+dnf install mysql -y 
 VALIDATE $? "Installing mysql"
 
-mysql -h  mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE
+mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pMYSQL_ROOT_PASSWORD -e 'use cities' 
 if [ $? -ne 0 ]
 then 
-   mysql -h  mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql  &>>$LOG_FILE
-   mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/app-user.sql  &>>$LOG_FILE
-   mysql -h mysql.subbuaws.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
-   VALIDATE $? "Loading data into mysql"
-else
-   echo -e "data is already loaded in mysql ... $Y SKIPPING $N"
+    mysql -h mysql.subbuaws.site -uroot -pMYSQL_ROOT_PASSWORD < /app/db/schema.sql
+    mysql -h mysql.subbuaws.site -uroot -pMYSQL_ROOT_PASSWORD < /app/db/app-user.sql 
+    mysql -h mysql.subbuaws.site -uroot -pMYSQL_ROOT_PASSWORD < /app/db/master-data.sql
+    VALIDATE $? "Loading data inti mysql"
+else 
+   echo -e "data is already loaded ... $Y SKIPPING $N"
 fi 
 
-systemctl restart shipping &>>$LOG_FILE
+systemctl restart shipping
 VALIDATE $? "Restarting shipping"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
 
 echo -e "Script executed completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
-
-
 

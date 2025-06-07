@@ -38,13 +38,13 @@ echo "please enter the root password to setup "
 read -s RABBITMQ_PASSWORD
 
 dnf install rabbitmq-server -y
-VALIDATE $? "Installing rabbitmq server"
+VALIDATE $? "Installing rabbitmq-server"
 
 systemctl enable rabbitmq-server
 VALIDATE $? "Enabling rabbitmq-server"
 
 systemctl start rabbitmq-server
-VALIDATE $? "Starting rabbitmq server"
+VALIDATE $? "Starting rabbitmq-server"
 
 rabbitmqctl add_user roboshop $RABBITMQ_PASSWORD
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
