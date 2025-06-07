@@ -54,15 +54,15 @@ fi
 mkdir -p /app | tee -a $LOG_FILE 
 VALIDATE $? "Creating app directory"
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip | tee -a $LOG_FILE 
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>> $LOG_FILE 
 VALIDATE $? "Downloading catalogue code"
 
 rm -rf /app/*
 cd /app
-unzip /tmp/catalogue.zip | tee -a $LOG_FILE 
+unzip /tmp/catalogue.zip &>> $LOG_FILE 
 VALIDATE $? "Unzipping catalogue code"
 
-npm install | tee -a $LOG_FILE 
+npm install &>> $LOG_FILE 
 VALIDATE $? "Installing dependencies"
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
