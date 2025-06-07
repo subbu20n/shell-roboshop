@@ -10,48 +10,42 @@ N="\e[0m"
 LOGS_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
-SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
-echo -e "script started executed at: $(date)" | tee -a $LOG_FILE
+echo -e "script started execution at : $(date +%s)"
 
 if [ $USERID -ne 0 ]
 then 
-   echo -e "$R ERROR:: please run this script with root access $N" | tee -a $LOG_FILE
+   echo -e "$R ERROR:: please run th script with root access $N"
    exit 1
-else
-   echo "you are running with root access"
+else 
+   echo -e "you are running with root access"
 fi
 
-#validate function takes input as exit status what command that they tried to install
+# validate function takes input as exit  status what command tried to install it
 VALIDATE(){
-    if [ $1 -eq 0 ]
-    then
-       echo -e "Installing $2 is ... $G SUCCESS $N" | tee -a $LOG_FILE
-    else
-       echo -e "Installing $2 is ... $R FAILURE $N" | tee -a $LOG_FILE
-    fi      
+   if [ $1 -eq 0 ]
+   then 
+      echo -e "Installing $2 is ... $G SUCCESS $N"
+   else 
+      echo -e "Installing $2 is ... $R FAILURE $N"   
 }
 
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongod.repo
+copy mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "copying mongodb repo"
 
-dnf install mongodb-org -y &>>$LOG_FILE
-VALIDATE $? "Installing mongodb server"
+dnf install mongodb-org -y
+VALIDATE $? "installing mongodb"
 
-systemctl enable mongod &>>$LOG_FILE
-VALIDATE $? "Enabling mongodb"
 
-systemctl start mongod &>>$LOG_FILE
-VALIDATE $? "Starting mongodb"
+systemctl enable mongod
+VALIDATE $? "Enabling mongod" 
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
-VALIDATE $? "Editing mongod conf file for access remote connections"
+systemctl start mongod
+VALIDATE $? "Starting mongod" 
 
-systemctl restart mongod &>>$LOG_FILE
-VALIDATE $? "Restarting mongodb"
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf 
+VALIDATE $? "Editing mongod conf file for allow remote connections" 
 
-END_TIME=$(date +%s)
-TOTAL_TIME=$(( $END_TIME - $START_TIME ))
-
-echo -e "script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
+systemctl restart mongod
+VALIDATE $? "Restarting mongod"
