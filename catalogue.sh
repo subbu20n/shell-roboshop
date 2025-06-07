@@ -33,66 +33,61 @@ VALIDATE(){
     fi      
 }
 
-dnf module disable nodejs -y &>>$LOG_FILE
-VALIDATE $? "Disabling nodejs -y"
+dnf module disable nodejs -y &>> $LOG_FILE 
+VALIDATE $? "Disabling nodejs"
 
-dnf module enable nodejs:20 -y &>>$LOG_FILE
-VALIDATE $? "Enabling nodejs"
+dnf module enable nodejs:20 -y &>> $LOG_FILE 
+VALIDATE $? "Enabing nodejs"
 
-dnf install nodejs -y &>>$LOG_FILE
-VALIDATE $? "Installing nodejs"
+dnf install nodejs -y &>> $LOG_FILE 
+VALIDATE $? "Installing nodejs" 
 
 id roboshop
-if [ $? -ne 0 ]
-then
-   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-   VALIDATE $? "creating system user roboshop"
-else 
-   echo "system user roboshop already created ... $Y SKIPPING $N"
+if [ $? - ne 0 ]
+then 
+   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $LOG_FILE
+   VALIDATE $? "Creating system user roboshop"
+else
+   echo -e "system user roboshop already created ... $Y SKIPPING $N" 
 fi 
 
-mkdir -p /app &>>$LOG_FILE
+mkdir -p /app | tee -a $LOG_FILE 
 VALIDATE $? "Creating app directory"
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$LOG_FILE
-VALIDATE $? "downloading catalogue"
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip | tee -a $LOG_FILE 
+VALIDATE $? "Downloading catalogue code"
 
 rm -rf /app/*
-cd /app 
-unzip /tmp/catalogue.zip &>>$LOG_FILE
-VALIDATE $? "Unzipping catalogue"
+cd /app
+unzip /tmp/catalogue.zip | tee -a $LOG_FILE 
+VALIDATE $? "Unzipping catalogue code"
 
-npm install &>>$LOG_FILE
-VALIDATE $? "inatall dependencies"
+npm install | tee -a $LOG_FILE 
+VALIDATE $? "Installing dependencies"
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
-VALIDATE $? "Copying catalogue service"
+VALIDATE $? "Copying catalogue.service"
 
-systemctl daemon-reload &>>$LOG_FILE
-VALIDATE $? "Daemon reload"
+systemctl daemon-reload | tee -a $LOG_FILE 
+VALIDATE $? "Daemon reload" 
+systemctl enable catalogue | tee -a $LOG_FILE 
+systemctl start catalogue | tee -a $LOG_FILE 
+validate $? "starting catalogue" 
 
-systemctl enable catalogue &>>$LOG_FILE
-VALIDATE $? "Enabling catalogue"
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongodb.repo
+VALIDATE $? "Copying mongodb repo"
 
-systemctl start catalogue &>>$LOG_FILE
-VALIDATE $? "Starting catalogue"
-
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongod.repo
-VALIDATE $? "copying mongo repo"
-
-dnf install mongodb-mongosh -y &>>$LOG_FILE
-VALIDATE $? "installing mongodb"
+dnf install mongodb-mongosh -y &>> $LOG_FILE 
+VALIDATE $? "install mongodb client"
 
 STATUS=$(mongosh --host mongodb.subbuaws.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
-if [ $STATUS -lt 0 ]
-then
-    mongosh --host mongodb.subbuaws.site </app/db/master-data.js &>>$LOG_FILE
-    VALIDATE $? "loading data into mysql"
-else
-    echo -e "data is already loadd in mysql ... $Y SKIPPING $N" &>>$LOG_FILE
-fi
-
+if [ $? -ne 0 ]
+then 
+   mongosh --host mongodb.subbuaws.site </app/db/master-data.js | tee -a $LOG_FILE 
+   VALIDATE $? "Loading data into mogodb" 
+else 
+   echo -e "data is already loaded into mongodb ... $Y SKIPPING $N" | tee -a $LOG_FILE 
+fi 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
-
-echo -e "Script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
+echo -e "Script execution completed successfully,  $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE 
