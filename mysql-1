@@ -34,7 +34,7 @@ else
 fi 
 }
 
-echo "please enter root password to setup"
+echo "please enter root password setup"
 read -s MYSQL_ROOT_PASSWORD
 
 
