@@ -38,42 +38,41 @@ dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "Disabling nodejs"
 
 dnf module enable nodejs:20 -y &>>$LOG_FILE
-VALIDATE $? "Enabling nodejs"
+VALIDATE $? "Enabling nodejs" 
 
-dnf install nodejs -y &>>$LOG_FILE
-VALIDATE $? "Installing nodejs"
+dnf install nodejs -y &>>$LOG_FILE 
+VALIDATE $? "installing nodejs" 
 
 id roboshop
 if [ $? -ne 0 ]
 then 
-    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-    VALIDATE $? "Creating  roboshop system user"
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop | tee -a $LOG_FILE
+    VALIDATE $? "Creating roboshop system user"
 else 
-    echo -e "system user roboshop already created ... $Y SKIPPING $N"
-fi
+    echo -e "system user roboshop already created... $Y SKIPPING $N" 
 
-mkdir -p /app &>>$LOG_FILE
-VALIDATE $? "Creating  app directory"
+mkdir -p /app 
+VALIDATE $? "Creating app directory"
 
-
-curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
-VALIDATE $? "Downloading user"
+curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip | tee -a $LOG_FILE
+VALIDATE $? "Download user code"
 
 rm -rf /app/*
-cd /app
-unzip /tmp/user.zip &>>$LOG_FILE
+cd /app 
+unzip /tmp/user.zip | tee -a $LOG_FILE
 VALIDATE $? "Unzipping user"
 
-npm install &>>$LOG_FILE
-VALIDATE $? "Installing Dependencies"
+cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service 
+VALIDATE $? "Copying user service" 
 
-cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service
-VALIDATE $? "Copying user service"
+systemctl daemon-reload | tee -a $LOG_FILE
+VALIDATE $? "daemon reload" 
 
-systemctl daemon-reload &>>$LOG_FILE
-systemctl enable user &>>$LOG_FILE
-systemctl start user &>>$LOG_FILE
+systemctl start user | tee -a $LOG_FILE
 VALIDATE $? "Starting user"
+
+systemctl enable user | tee -a $LOG_FILE
+VALIDATE $? "Enabling user" 
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
