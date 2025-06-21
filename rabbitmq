@@ -49,7 +49,7 @@ VALIDATE $? "Enabling rabbitmq-server"
 systemctl start rabbitmq-server
 VALIDATE $? "Starting rabbitmq-server"
 
-rabbitmqctl add_user roboshop roboshop123
+rabbitmqctl add_user roboshop $RABBITMQ_PASSWORD
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
 
 END_TIME=$(date +%s)
