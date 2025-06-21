@@ -73,4 +73,3 @@ VALIDATE $? "Starting user"
 
 systemctl enable user | tee -a $LOG_FILE
 VALIDATE $? "Enabling user" 
-
