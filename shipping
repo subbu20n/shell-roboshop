@@ -55,10 +55,9 @@ VALIDATE $? "Creating /app directory"
 curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip | tee -a $LOG_FILE 
 VALIDATE $? "Download shipping code"
 
-rm -rf /app/* 
+rm -rf /app/*
 cd /app 
-unzip /tmp/shipping.zip $>>$LOG_FILE 
-VALIDATE $? "Unzipping shipping"
+unzip /tmp/shipping.zip
 
 cd /app 
 mvn clean package | tee -a $LOG_FILE 
