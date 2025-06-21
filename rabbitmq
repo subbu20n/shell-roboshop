@@ -34,11 +34,14 @@ else
 fi 
 }
 
-echo "please enter the root password to setup "
+echo "please enter rabbitmq-password"
 read -s RABBITMQ_PASSWORD
 
+cp $SCRIPT_DIR/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo 
+VALIDATE $? "Copying rabbitmq repo" 
+
 dnf install rabbitmq-server -y
-VALIDATE $? "Installing rabbitmq-server"
+VALIDATE $? "Installing rabbitmq-server" 
 
 systemctl enable rabbitmq-server
 VALIDATE $? "Enabling rabbitmq-server"
@@ -46,7 +49,7 @@ VALIDATE $? "Enabling rabbitmq-server"
 systemctl start rabbitmq-server
 VALIDATE $? "Starting rabbitmq-server"
 
-rabbitmqctl add_user roboshop $RABBITMQ_PASSWORD
+rabbitmqctl add_user roboshop roboshop123
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
 
 END_TIME=$(date +%s)
