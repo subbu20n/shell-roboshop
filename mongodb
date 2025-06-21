@@ -22,7 +22,7 @@ else
    echo -e "you are running with root access" | tee -a $LOG_FILE
 fi
 
-# validate function takes input as exit  status what command tried to install it
+# validate function takes input as exit  status what command tried to install 
 VALIDATE(){
    if [ $1 -eq 0 ]
    then 
@@ -33,7 +33,7 @@ VALIDATE(){
 }
 
 cp mongo.repo /etc/yum.repos.d/mongodb.repo 
-VALIADTE $? "copying mongodb repo"
+VALIDATE $? "copying mongodb repo"
 
 dnf install mongodb-org -y | &>>$LOG_FILE 
 VALIDATE $? "installing mobgodb server"
