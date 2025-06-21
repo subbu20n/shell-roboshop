@@ -58,6 +58,7 @@ VALIDATE $? "Download shipping code"
 rm -rf /app/*
 cd /app 
 unzip /tmp/shipping.zip
+VALIDATE $? "unzipping shipping"
 
 cd /app 
 mvn clean package | tee -a $LOG_FILE 
