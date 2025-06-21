@@ -34,13 +34,13 @@ else
 fi 
 }
 
-dnf install python3 gcc python3-devel -y
+dnf install python3 gcc python3-devel -y &>>$LOG_FILE
 VALIDATE $? "Installing python3 packages" 
 
 id roboshop 
 if [ $? -ne 0 ]
 then 
-   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
    VALIDATE $? "Creating roboshop system user"
 else 
    echo -e "roboshop systemuser already created... $Y SKIPPING $N" 
@@ -49,24 +49,24 @@ fi
 mkdir /app 
 VALIDATE $? "creating /app directory"
 
-curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
+curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$LOG_FILE
 VALIDATE $? "Download payment" 
 
 rm -rf /app/*
 cd /app 
-unzip /tmp/payment.zip
+unzip /tmp/payment.zip &>>$LOG_FILE
 VALIDATE $? "unzipping payment" 
 
 cd /app 
-pip3 install -r requirements.txt
+pip3 install -r requirements.txt &>>$LOG_FILE
 VALIDATE $? "Installing dependencies" 
 
 cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service 
 VALIDATE $? "Copying payment service" 
 
-systemctl daemon-reload
+systemctl daemon-reload | tee -a $LOG_FILE
 VALIDATE $? "daemon reload" 
 
-systemctl start payment 
-systemctl enable payment 
+systemctl start payment | tee -a $LOG_FILE
+systemctl enable payment | tee -a $LOG_FILE
 VALIDATE $? "Starting payment  
