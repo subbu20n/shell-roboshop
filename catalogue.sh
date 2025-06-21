@@ -49,8 +49,9 @@ then
     VALIDATE $? "creating roboshop  system user"
 else 
     echo -e "system user roboshop already created... $Y SKIPPING $N" | tee -a $LOG_FILE 
+fi     
 
-mkdir /app | tee -a $LOG_FILE 
+mkdir -p /app | tee -a $LOG_FILE 
 VALIDATE $? "Creating /app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip | tee -a $LOG_FILE 
