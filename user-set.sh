@@ -37,7 +37,7 @@ dnf module disable nodejs -y &>>$LOG_FILE
 
 dnf module enable nodejs:20 -y &>>$LOG_FILE
 
-dnf install nodejs -y &>>$LOG_FILE
+dnf install nodejssdfg -y &>>$LOG_FILE
 
 
 id roboshop
