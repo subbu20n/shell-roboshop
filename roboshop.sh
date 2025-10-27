@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMI_ID="ami-09c813fb71547fc4f"
-SG_ID="sg-04f5b8fdb267df1bd" # replace with your SG ID
+SG_ID="sg-0ad4f1d9859b4f090" # replace with your SG ID
 INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
 ZONE_ID="Z06528725AJCPEPL0K7K" # replace with your ZONE ID
 DOMAIN_NAME="subbuaws.site" # replace with your domain
@@ -20,7 +20,7 @@ do
     fi
     echo "$instance IP address: $IP"
 
-    aws route53 change-resource-record-sets \
+    aws route53 change-resource-record-sets \ 
     --hosted-zone-id $ZONE_ID \
     --change-batch '
     {
