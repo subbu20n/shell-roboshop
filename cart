@@ -21,7 +21,7 @@ then
    exit 1 # give other tha 0 upto 127
 else
     echo -e "you are running with root access" |  tee -a $LOG_FILE
-fi 
+fi     
     
 # validate function takes input as exit status what command they tried to install
 VALIDATE(){
